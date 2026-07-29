@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: church-donation-backend
+    runtime: python
+    # Tells Render to run commands relative to the backend folder
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    # Tells Gunicorn to look inside the backend folder context
+    startCommand: cd backend && gunicorn church_donation_management.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: church-donation-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+
+databases:
+  - name: church-donation-db
+    plan: free
