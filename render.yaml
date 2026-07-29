@@ -2,14 +2,13 @@ services:
   - type: web
     name: church-donation-backend
     runtime: python
-    # Tells Render to run commands relative to the backend folder
+    # This explicitly forces Render to build inside the backend folder context
+    rootDirectory: backend
     buildCommand: |
-      cd backend
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
       python manage.py migrate
-    # Tells Gunicorn to look inside the backend folder context
-    startCommand: cd backend && gunicorn church_donation_management.wsgi:application
+    startCommand: gunicorn church_donation_management.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
