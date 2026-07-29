@@ -2,8 +2,8 @@ services:
   - type: web
     name: church-donation-backend
     runtime: python
-    # This explicitly forces Render to build inside the backend folder context
-    rootDirectory: backend
+    # Tells Render to scope all paths inside the backend subfolder
+    rootDir: backend
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
