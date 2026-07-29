@@ -8,10 +8,12 @@ import axios from "axios";
 
 /**
  * Root host directory endpoint URL for the backend database system.
- * Modify this variable to point to staging or live cloud services during deployment.
+ * Automatically switches between local testing and live production modes.
  * @type {string}
  */
-const baseUrl = "http://localhost:8000/";
+const baseUrl = import.meta.env.DEV 
+  ? "http://localhost:8000/" 
+  : "https://onrender.com";
 
 /**
  * Shared Application Networking Pipeline Instance
