@@ -2,6 +2,11 @@
 
 A production-grade, full-stack web application designed to manage church memberships, tracking localized church branches, and aggregate financial offerings with real-time analytics. Built using a decoupled architecture featuring **Django REST Framework (DRF)** on the backend and **React (Vite) + Material-UI (MUI)** on the frontend.
 
+## 🌐 Live Demo
+* **Frontend Application**: [https://knight8732.github.io/Church-Donation-System/](https://knight8732.github.io/Church-Donation-System/)
+
+> ⚠️ **Deployment Note**: The frontend client is hosted statically on GitHub Pages. To view your live changes fetching and saving real data, you must deploy your Django backend (e.g., to Render or Railway) and update the client's API base URL configuration from `localhost` to your live API server.
+
 ## 🚀 Key Features
 
 *   **Financial Insights Dashboard**: Aggregates and displays current calendar year contributions grouped dynamically by church activity lines (e.g., General Offerings vs. Building Funds).
