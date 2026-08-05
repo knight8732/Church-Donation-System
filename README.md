@@ -1,77 +1,75 @@
-# Church Donation & Member Management System
+# Church Donation Management System
 
-An internal administrative dashboard designed to securely manage church member directory records, track annual financial tithes and offerings, and dynamically generate tax-compliant contribution receipts on the client side.
+A production-grade, full-stack web application designed to manage church memberships, tracking localized church branches, and aggregate financial offerings with real-time analytics. Built using a decoupled architecture featuring **Django REST Framework (DRF)** on the backend and **React (Vite) + Material-UI (MUI)** on the frontend.
+
+## 🌐 Live Demo
+* **Frontend Application**: [https://knight8732.github.io/Church-Donation-System/](https://knight8732.github.io/Church-Donation-System/)
+
+> ⚠️ **Deployment Note**: The frontend client is hosted statically on GitHub Pages. To view your live changes fetching and saving real data, you must deploy your Django backend (e.g., to Render or Railway) and update the client's API base URL configuration from `localhost` to your live API server.
 
 ## 🚀 Key Features
 
-*   **Member Directory**: Full CRUD lifecycle operations handled through a responsive `material-react-table` interface.
-*   **Dynamic Document Engine**: Instant extraction of member financials into stylized Microsoft Word (`.docx`) files matching legal donation guidelines.
-*   **Asynchronous Bulk Actions**: Simultaneous multi-page receipt compilation using local browser background threads.
-*   **Intuitive UI Themes**: Built strictly with Material UI styling patterns using deep religious palette configurations (`#1b5e20`).
+*   **Financial Insights Dashboard**: Aggregates and displays current calendar year contributions grouped dynamically by church activity lines (e.g., General Offerings vs. Building Funds).
+*   **Dynamic Data Tables**: Implements `Material React Table` with custom column filtering, full server-data mapping, and fluid action handling hooks.
+*   **Automated Metrics Realignment**: Dynamically runs database aggregations (`Sum`, `Count`) to surface lifetime member contributions alongside Year-to-Date (YTD) summaries.
+*   **Robust Data Integrity**: Implements rigorous schema verification via Formik & Yup matching custom Django model constraints to prevent orphan data states.
 
----
+## 🛠️ Tech Stack
 
-## 🛠️ Tech Stack & Dependencies
+*   **Frontend**: React 19 (Vite), Material-UI v6, Material React Table, Formik, Yup, Axios.
+*   **Backend**: Python 3.14, Django 6.0, Django REST Framework (DRF).
+*   **Database**: SQLite (Development) / PostgreSQL compatible schema configurations.
 
-### Frontend Core
-*   **Framework:** React 18+ (with Vite toolchain)
-*   **UI Components:** Material UI (MUI v5)
-*   **Data Grids:** Material React Table (MRT)
+## 📐 System Architecture & Database Schema
 
-### Document Processing
-*   **`docx`**: Native binary client-side OpenXML schema compiler
-*   **`file-saver`**: Local browser microtask data-stream downloading handler
-
----
-
-## ⚙️ Local Development Setup
-
-Follow these exact steps to spin up the application structure locally on your workstation.
-
-### Prerequisites
-*   **Node.js**: `v20.x` or higher installed
-*   **Package Manager**: `npm` or `yarn`
-
-### 1. Installation
-Clone this repository locally and run the clean workspace setup script inside your root frontend folder:
-```bash
-cd frontend
-npm install
-```
-
-### 2. Configure Environment Properties
-Create a `.env` file in the root of the project structure directory to connect to your local `AxiosInstance` endpoint routing configurations:
-```env
-VITE_API_BASE_URL=http://localhost:8000/api/v1/
-```
-
-### 3. Spin Up Development Server
-Initialize the Vite hot-reloading development pipeline:
-```bash
-npm run dev
-```
-Once initialized, navigate your active browser tab to `http://localhost:5173`.
-
----
-
-## 📁 Repository Structure Mapping
+The platform relies on a clean relational architecture optimized with database-layer lookups (`select_related`, `prefetch_related`) to minimize operational overhead (resolving N+1 query problems).
 
 ```text
-src/
-├── components/
-│   ├── Members/
-│   │   ├── MemberList.jsx       # Main member directory grid table view
-│   │   └── CreateMember.jsx     # Addition profile forms interface
-│   ├── Forms/
-│   │   ├── AlertDialog.jsx      # Reusable transactional warning dialogs
-│   │   └── GenerateDocument.jsx # Core word document compilation engine
-│   └── Axios.jsx                # Global interceptor networking instance
+  ┌──────────────┐             ┌──────────────┐             ┌──────────────┐
+  │   Churches   │             │   Members    │             │  Donations   │
+  ├──────────────┤             ├──────────────┤             ├──────────────┤
+  │ id (PK)      │◄───1:N──────┤ church_id    │◄───1:N──────┤ member (FK)  │
+  │ name         │             │ full_name    │             │ amount       │
+  │ address      │             │ email        │             │ activity     │
+  └──────────────┘             └──────────────┘             └──────────────┘
 ```
 
----
+## 🛠️ Installation & Setup
 
-## 📜 Compliance & Document Guidelines
+### Prerequisites
+*   Python 3.14+
+*   Node.js 20+
 
-All receipts exported through the system are formatted according to non-profit regulatory criteria:
-1.  **Font Standardizations**: Set to structural `Arial` styles with strict relative font dimensions (tracked via half-points inside the document engine module).
-2.  **Tax Statements**: Generates dynamic tax exemption text certifying that "no goods or services were provided in exchange for this contribution other than intangible religious benefits".
+### Backend Setup
+1. Clone the repository and navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Run migrations and start the Django server:
+   ```bash
+   python manage.py migrate
+   python manage.py runserver
+   ```
+
+### Frontend Setup
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../frontend
+   ```
+2. Install npm packages:
+   ```bash
+   npm install
+   ```
+3. Spin up the Vite development server:
+   ```bash
+   npm run dev
+   ```
