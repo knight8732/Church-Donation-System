@@ -116,25 +116,39 @@ export default function DonationList() {
   );
 
   return (
-    <Box sx={{ p: 4, bgcolor: "#fcfcf9", minHeight: "100vh" }}>
+    <Box 
+      sx={{ 
+        p: { xs: 2, sm: 3, md: 4 }, 
+        pt: { xs: "72px", sm: "88px", md: 4 }, // Clears fixed top navigation layouts on mobile/tablet viewports
+        bgcolor: "#fcfcf9", 
+        minHeight: "100vh",
+        boxSizing: "border-box"
+      }}
+    >
       {/* Top Application Execution Header Controls Component Row */}
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" }, // Converts layout flow into row alignments at 600px+ tablet views
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: { xs: "stretch", sm: "center" },
+          gap: 2,
           mb: 4,
         }}
       >
-        <Box>
+        <Box sx={{ minWidth: 0, flex: 1 }}> {/* minWidth: 0 isolates layout and prevents title truncation text blocks */}
           <Typography variant="h5" sx={{ fontWeight: 700, color: "#1a1a1a" }}>
             Donations
           </Typography>
-          <Typography variant="body2" sx={{ color: "#666", mt: 0.5 }}>
+          <Typography variant="body2" sx={{ color: "#666", mt: 0.5, wordBreak: "break-word" }}>
             Manage and audit church funding ledger streams.
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1.5}>
+        <Stack 
+          direction="row" 
+          spacing={1.5}
+          sx={{ flexShrink: 0 }} // Stabilizes buttons from resizing down into narrow boxes
+        >
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -142,6 +156,8 @@ export default function DonationList() {
               textTransform: "none",
               bgcolor: "#1b5e20",
               fontWeight: 500,
+              whiteSpace: "nowrap",
+              width: { xs: "100%", sm: "auto" },
               "&:hover": { bgcolor: "#144517" },
             }}
             onClick={() => navigate("/create-donations")}
@@ -155,10 +171,13 @@ export default function DonationList() {
       <Paper
         elevation={0}
         sx={{
-          p: 3,
+          p: { xs: 2, sm: 3 },
           borderRadius: 2,
           border: "1px solid #f0f0e8",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.02)",
+          width: "100%",
+          boxSizing: "border-box",
+          overflow: "hidden" // Contains nested horizontal scrollbars inside structural card bounds
         }}
       >
         {/* Secondary Inner Section Identity Header Meta Block */}
@@ -184,15 +203,17 @@ export default function DonationList() {
         </Box>
 
         {/* High-Performance Material Data Grid Table Wrapper */}
+        {/* Removed extra outer box container wrapper to fix horizontal clip truncation bugs */}
         <MaterialReactTable 
           columns={columns} 
           data={donations} 
           enableRowActions 
-          positionActionsColumn="last"
-          layoutMode="grid"
+          positionActionsColumn="last" // Keeps actions securely positioned at the right border wall column
+          layoutMode="semantic" // Changed from 'grid' to 'semantic' to allow natural responsive cell sizing and scaling
           muiTableProps={{
             sx: {
               border: '1px solid #e0e0e0', 
+              tableLayout: 'auto', // Allows cells to size themselves naturally based on data content length
             },
           }}
           muiTableHeadCellProps={{
@@ -217,35 +238,36 @@ export default function DonationList() {
           muiTableContainerProps={{ 
             sx: { 
               maxWidth: '100%', 
-              overflowX: 'auto',
-              display: 'block'
+              overflowX: 'auto', // Turns on smooth native horizontal scrolling for columns within the table frame itself
             } 
           }}
           displayColumnDefOptions={{
             'mrt-row-actions': {
               header: 'Actions',
-              size: 110, // Explicitly sized padding boundary avoids action element overlap bugs
+              size: 110, // Explicit size tracking ensures actions column does not compress or clip out of bounds
               muiTableHeadCellProps: {
                 align: 'left',
               },
             },
           }}
           renderRowActions={({ row }) => (
-            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '4px' }}>
               <IconButton 
                 component={Link} 
                 to={`edit/${row.original.id}`} // Straight router link binding for seamless template transition shifts
                 sx={{ "& .MuiSvgIcon-root": { color: "#1b5e20" } }} 
                 title="Edit Entry"
+                size="small"
               >
-                <EditIcon />
+                <EditIcon fontSize="small" />
               </IconButton>
               <IconButton 
                 onClick={() => handleDeleteClick(row.original.id)} 
                 sx={{ color: "#d32f2f" }}
                 title="Delete Entry"
+                size="small"
               >
-                <DeleteIcon />
+                <DeleteIcon fontSize="small" />
               </IconButton>
             </Box>
           )} 
@@ -263,4 +285,5 @@ export default function DonationList() {
       />
     </Box>
   );
+
 }

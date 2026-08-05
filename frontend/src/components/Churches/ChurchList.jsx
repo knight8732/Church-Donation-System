@@ -118,25 +118,39 @@ export default function ChurchList() {
   );
 
   return (
-    <Box sx={{ p: 4, bgcolor: "#fcfcf9", minHeight: "100vh" }}>
+    <Box 
+      sx={{ 
+        p: { xs: 2, sm: 3, md: 4 }, 
+        pt: { xs: "72px", sm: "88px", md: 4 }, // Clears the fixed top navigation bar panel on mobile and tablet viewports
+        bgcolor: "#fcfcf9", 
+        minHeight: "100vh",
+        boxSizing: "border-box"
+      }}
+    >
       {/* Top Application Execution Header Controls Component Row */}
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" }, 
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: { xs: "stretch", sm: "center" },
+          gap: 2,
           mb: 4,
         }}
       >
-        <Box>
+        <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "#1a1a1a" }}>
             Churches
           </Typography>
-          <Typography variant="body2" sx={{ color: "#666", mt: 0.5 }}>
+          <Typography variant="body2" sx={{ color: "#666", mt: 0.5, wordBreak: "break-word" }}>
             Manage church branch information.
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1.5}>
+        <Stack 
+          direction="row" 
+          spacing={1.5}
+          sx={{ flexShrink: 0 }}
+        >
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -144,6 +158,8 @@ export default function ChurchList() {
               textTransform: "none",
               bgcolor: "#1b5e20",
               fontWeight: 500,
+              whiteSpace: "nowrap",
+              width: { xs: "100%", sm: "auto" },
               "&:hover": { bgcolor: "#144517" },
             }}
             onClick={() => navigate("/create-churches")}
@@ -157,10 +173,13 @@ export default function ChurchList() {
       <Paper
         elevation={0}
         sx={{
-          p: 3,
+          p: { xs: 2, sm: 3 },
           borderRadius: 2,
           border: "1px solid #f0f0e8",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.02)",
+          width: "100%",
+          boxSizing: "border-box",
+          overflow: "hidden"
         }}
       >
         {/* Secondary Inner Section Identity Header Meta Block */}
@@ -185,23 +204,25 @@ export default function ChurchList() {
           </Box>
         </Box>
 
-        {/* Unified High-Performance Material Data Grid Table Wrapper */}
+        {/* High-Performance Material Data Grid Table Wrapper */}
+        {/* Removed extra outer box container wrapper to fix horizontal clip truncation bugs */}
         <MaterialReactTable 
           columns={columns} 
           data={churches} 
           enableRowActions 
-          positionActionsColumn="last" // Locks actions securely to the right border wall column
-          layoutMode="grid"
+          positionActionsColumn="last" // Keeps actions securely positioned at the right border wall column
+          layoutMode="semantic" // Changed from 'grid' to 'semantic' to allow natural responsive cell sizing and scaling
           muiTableProps={{
             sx: {
-              border: '1px solid #e0e0e0', 
+              border: '1px solid #e0e0e0',
+              tableLayout: 'auto', // Allows cells to size themselves naturally based on data content length
             },
           }}
           muiTableHeadCellProps={{
             sx: {
               borderRight: '1px solid #e0e0e0',
               borderBottom: '2px solid #e0e0e0',
-              whiteSpace: 'nowrap', // Prevents titles from breaking into weird multi-line words
+              whiteSpace: 'nowrap', 
               '& .Mui-TableHeadCell-Content': {
                 justifyContent: 'flex-start',
               },
@@ -211,43 +232,44 @@ export default function ChurchList() {
             sx: {
               borderRight: '1px solid #e0e0e0',
               borderBottom: '1px solid #e0e0e0',
-              whiteSpace: 'nowrap', // Keeps text elements on a single clean line
+              whiteSpace: 'nowrap', 
               overflow: 'hidden',
-              textOverflow: 'ellipsis', // Adds "..." if text overflows column size bounds
+              textOverflow: 'ellipsis', 
             },
           }}
           muiTableContainerProps={{ 
             sx: { 
               maxWidth: '100%', 
-              overflowX: 'auto',
-              display: 'block'
+              overflowX: 'auto', // Turns on smooth native horizontal scrolling for columns within the table frame itself
             } 
           }}
           displayColumnDefOptions={{
             'mrt-row-actions': {
               header: 'Actions',
-              size: 110, // Explicitly sized padding boundary avoids action element overlap bugs
+              size: 110, // Explicit size tracking ensures actions column does not compress or clip out of bounds
               muiTableHeadCellProps: {
                 align: 'left',
               },
             },
           }}
           renderRowActions={({ row }) => (
-            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '4px' }}>
               <IconButton 
                 component={Link} 
-                to={`edit/${row.original.id}`} // Router configuration link destination pathway
+                to={`edit/${row.original.id}`} 
                 sx={{ "& .MuiSvgIcon-root": { color: "#1b5e20" } }} 
                 title="Edit Church"
+                size="small"
               >
-                <EditIcon />
+                <EditIcon fontSize="small" />
               </IconButton>
               <IconButton 
                 onClick={() => handleDeleteClick(row.original.id)} 
                 sx={{ color: "#d32f2f" }}
                 title="Delete Church"
+                size="small"
               >
-                <DeleteIcon />
+                <DeleteIcon fontSize="small" />
               </IconButton>
             </Box>
           )} 
@@ -265,4 +287,5 @@ export default function ChurchList() {
       />
     </Box>
   );
+
 }

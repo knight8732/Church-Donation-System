@@ -142,39 +142,53 @@ export default function MemberList() {
     []
   );
 
-  return (
-    <Box sx={{ p: 4, bgcolor: "#fcfcf9", minHeight: "100vh" }}>
+ return (
+    <Box 
+      sx={{ 
+        p: { xs: 2, sm: 3, md: 4 }, 
+        pt: { xs: "72px", sm: "88px", md: 4 }, // Pushes content below the top panel on mobile and tablet
+        bgcolor: "#fcfcf9", 
+        minHeight: "100vh",
+        boxSizing: "border-box"
+      }}
+    >
       {/* Top Application Execution Header Controls Component Row */}
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: { xs: "stretch", sm: "center" },
+          gap: 2,
           mb: 4,
         }}
       >
-        <Box>
+        <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "#1a1a1a" }}>
             Members
           </Typography>
-          <Typography variant="body2" sx={{ color: "#666", mt: 0.5 }}>
+          <Typography variant="body2" sx={{ color: "#666", mt: 0.5, wordBreak: "break-word" }}>
             Manage your church members and their information.
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1.5}>
+        <Stack 
+          direction="row" 
+          spacing={1.5}
+          sx={{ flexShrink: 0 }}
+        >
           <Button
             variant="outlined"
             startIcon={<FileDownloadOutlinedIcon />}
             onClick={handleGenerateAllReceipts} 
-            disabled={members.length === 0} // Disables interaction if the member array dataset is empty
+            disabled={members.length === 0}
             sx={{
               textTransform: "none",
               borderColor: "#e0e0e0",
               color: "#333",
               fontWeight: 500,
+              whiteSpace: "nowrap",
               "&:hover": { borderColor: "#b5b5b5", bgcolor: "#f5f5f5" },
             }}
-
           >
             Generate All Receipts
           </Button>
@@ -185,6 +199,7 @@ export default function MemberList() {
               textTransform: "none",
               bgcolor: "#1b5e20",
               fontWeight: 500,
+              whiteSpace: "nowrap",
               "&:hover": { bgcolor: "#144517" },
             }}
             onClick={() => navigate("/create-members")}
@@ -198,10 +213,13 @@ export default function MemberList() {
       <Paper
         elevation={0}
         sx={{
-          p: 3,
+          p: { xs: 2, sm: 3 },
           borderRadius: 2,
           border: "1px solid #f0f0e8",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.02)",
+          width: "100%",
+          boxSizing: "border-box",
+          overflow: "hidden"
         }}
       >
         {/* Secondary Inner Section Identity Header Meta Block */}
@@ -227,42 +245,46 @@ export default function MemberList() {
         </Box>
 
         {/* Unified High-Performance Material Data Grid Table Wrapper */}
-        <MaterialReactTable 
-          columns={columns} 
-          data={members} 
-          enableRowActions
-          positionActionsColumn="last" // Locks transactional actions securely to the right border wall column
-          displayColumnDefOptions={{
-            'mrt-row-actions': {
-              header: 'Actions',
-              size: 160, // Enforces dedicated spatial padding definitions to eliminate element text wrapping blocks
-            },
-          }}
-          renderRowActions={({ row }) => (
-            <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'nowrap' }}>
-              {/* Isolated Downloader Row Context Node */}
-              <IconButton 
-                onClick={() => generateAllReceipts([row.original])}
-                sx={{ "& .MuiSvgIcon-root": { color: "#1b5e20" } }}
-                title="Download Individual Receipt"
-              >
-                <FileDownloadOutlinedIcon />
-              </IconButton>
-              <IconButton 
-                onClick={() => navigate("edit/" + row.original.id)} // Dynamic path concatenation to circumvent regex interpreter errors
-                title="Edit Member"
-              >
-                <EditIcon color="primary" />
-              </IconButton>
-              <IconButton 
-                onClick={() => handleDeleteClick(row.original.id)}
-                title="Delete Member"
-              >
-                <DeleteIcon color="error" />
-              </IconButton>
-            </Box>
-          )}
-        />
+        <Box sx={{ width: "100%", overflowX: "auto", display: "block" }}>
+          <MaterialReactTable 
+            columns={columns} 
+            data={members} 
+            enableRowActions
+            positionActionsColumn="last"
+            displayColumnDefOptions={{
+              'mrt-row-actions': {
+                header: 'Actions',
+                size: { xs: 110, sm: 130, md: 160 },
+              },
+            }}
+            renderRowActions={({ row }) => (
+              <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'nowrap' }}>
+                <IconButton 
+                  onClick={() => generateAllReceipts([row.original])}
+                  sx={{ "& .MuiSvgIcon-root": { color: "#1b5e20" } }}
+                  title="Download Individual Receipt"
+                  size="small"
+                >
+                  <FileDownloadOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton 
+                  onClick={() => navigate("edit/" + row.original.id)}
+                  title="Edit Member"
+                  size="small"
+                >
+                  <EditIcon color="primary" fontSize="small" />
+                </IconButton>
+                <IconButton 
+                  onClick={() => handleDeleteClick(row.original.id)}
+                  title="Delete Member"
+                  size="small"
+                >
+                  <DeleteIcon color="error" fontSize="small" />
+                </IconButton>
+              </Box>
+            )}
+          />
+        </Box>
       </Paper>
 
       {/* Safety Overlaid Confirmation Interceptor Modal */}
@@ -276,4 +298,5 @@ export default function MemberList() {
       />
     </Box>
   );
+
 }

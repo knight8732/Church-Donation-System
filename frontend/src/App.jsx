@@ -43,14 +43,45 @@ const theme = createTheme({
       contrastText: '#fff',
     },
   },
+  // Global responsive font scaling layers
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    h3: {
+      '@media (max-width:600px)': { fontSize: '1.75rem' }, // Shrinks on extra-small mobile
+    },
+    h4: {
+      '@media (max-width:600px)': { fontSize: '1.5rem' },
+    },
+    h5: {
+      '@media (max-width:600px)': { fontSize: '1.25rem' },
+    },
+  },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px", // Matches input wrapper curves
+          paddingTop: "10px",   // Increases overall thumb engagement footprint
+          paddingBottom: "10px",
+          textTransform: "none",
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          paddingTop: "14px",   // Keeps line alignments perfectly level with text inputs
+          paddingBottom: "14px",
+        }
+      }
+    },
     MuiTextField: {
       defaultProps: {
         variant: "outlined",
       },
       styleOverrides: {
         root: {
-          marginBottom: "24px",
+          marginBottom: "20px", // Margins shrunk slightly to preserve display height on mobile
           width: "100%",
           "& .MuiOutlinedInput-root": {
             backgroundColor: "#f8f9f8",
@@ -68,12 +99,12 @@ const theme = createTheme({
             },
           },
           "& .MuiInputBase-input": {
-            paddingTop: "12px",
-            paddingBottom: "12px",
+            paddingTop: "14px",   // Elevated from 12px to adhere to 48px minimal touch-target scale rules
+            paddingBottom: "14px",
             paddingLeft: "16px",
             paddingRight: "16px",
             color: "#1a1a1a",
-            fontSize: "0.95rem",
+            fontSize: "1rem",     // Minimum 16px font standard to eliminate layout forcing auto-zooms on iOS Safari
             "&::placeholder": {
               color: "#8b948b",
               opacity: 1,
